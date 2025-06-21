@@ -14,23 +14,25 @@ public:
         }
 
         uint32 map = unit->GetMap()->GetId();
+        std::string evadeReasonText = GetEvadeReasonText(evadeReason);
         float unitX = unit->GetPositionX();
         float unitY = unit->GetPositionY();
         float unitZ = unit->GetPositionZ();
         float unitOrientation = unit->GetOrientation();
-        TypeID unitType = unit->GetTypeId();
+        std::string unitType = GetUnitTypeText(unit->GetTypeId());
         ObjectGuid::LowType unitGUID;
         if (unit->IsCreature())
             unitGUID = unit->ToCreature()->GetSpawnId();
         else
             unitGUID = 0;
 
-        std::string unitInfo = unitGUID + " " + std::to_string(unit->GetGUID().GetCounter()) + " " + unit->GetName();
+        LOG_ERROR("sql.sql", "{}", unitGUID);
+        std::string unitInfo = std::to_string(unitGUID) + " " + std::to_string(unit->GetGUID().GetCounter()) + " " + unit->GetName();
 
         Unit* attacker = unit->GetVictim();
         if (!attacker)
         {
-            CharacterDatabase.Execute("INSERT INTO evade_logs (Map, VictimX, VictimY, VictimZ, VictimO, VictimType, VictimInfo, AttackerX, AttackerY, AttackerZ, AttackerO, AttackerType, AttackerInfo, EvadeReason) VALUES ({}, {}, {}, {}, {}, {}, '{}', NULL, NULL, NULL, NULL, NULL, NULL, {})", map, unitX, unitY, unitZ, unitOrientation, unitType, unitInfo, evadeReason);
+            CharacterDatabase.Execute("INSERT INTO evade_logs (Map, VictimX, VictimY, VictimZ, VictimO, VictimType, VictimInfo, AttackerX, AttackerY, AttackerZ, AttackerO, AttackerType, AttackerInfo, EvadeReason) VALUES ({}, {}, {}, {}, {}, '{}', '{}', NULL, NULL, NULL, NULL, NULL, NULL, '{}')", map, unitX, unitY, unitZ, unitOrientation, unitType, unitInfo, evadeReason);
             return;
         }
 
@@ -38,7 +40,7 @@ public:
         float attackerY = attacker->GetPositionY();
         float attackerZ = attacker->GetPositionZ();
         float attackerOrientation = attacker->GetOrientation();
-        TypeID attackerType = attacker->GetTypeId();
+        std::string attackerType = GetUnitTypeText(attacker->GetTypeId());
         ObjectGuid::LowType attackerGUID;
         if (unit->IsCreature())
             attackerGUID = attacker->ToCreature()->GetSpawnId();
@@ -47,7 +49,7 @@ public:
 
         std::string attackerInfo = attackerGUID + " " + std::to_string(attacker->GetGUID().GetCounter()) + " " + attacker->GetName();
 
-        CharacterDatabase.Execute("INSERT INTO evade_logs (Map, VictimX, VictimY, VictimZ, VictimO, VictimType, VictimInfo, AttackerX, AttackerY, AttackerZ, AttackerO, AttackerType, AttackerInfo, EvadeReason) VALUES ({}, {}, {}, {}, {}, {}, '{}', {}, {}, {}, {}, {}, '{}', {})", map, unitX, unitY, unitZ, unitOrientation, unitType, unitInfo, attackerX, attackerY, attackerZ, attackerOrientation, attackerType, attackerInfo, evadeReason);
+        CharacterDatabase.Execute("INSERT INTO evade_logs (Map, VictimX, VictimY, VictimZ, VictimO, VictimType, VictimInfo, AttackerX, AttackerY, AttackerZ, AttackerO, AttackerType, AttackerInfo, EvadeReason) VALUES ({}, {}, {}, {}, {}, '{}', '{}', {}, {}, {}, {}, '{}', '{}', '{}')", map, unitX, unitY, unitZ, unitOrientation, unitType, unitInfo, attackerX, attackerY, attackerZ, attackerOrientation, attackerType, attackerInfo, evadeReason);
         return;
     }
 };
