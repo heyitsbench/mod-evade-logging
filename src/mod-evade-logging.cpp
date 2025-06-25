@@ -32,7 +32,7 @@ public:
         Unit* attacker = unit->GetVictim();
         if (!attacker)
         {
-            CharacterDatabase.Execute("INSERT INTO evade_logs (Map, VictimX, VictimY, VictimZ, VictimO, VictimType, VictimInfo, AttackerX, AttackerY, AttackerZ, AttackerO, AttackerType, AttackerInfo, EvadeReason) VALUES ({}, {}, {}, {}, {}, '{}', '{}', NULL, NULL, NULL, NULL, NULL, NULL, '{}')", map, unitX, unitY, unitZ, unitOrientation, unitType, unitInfo, evadeReason);
+            CharacterDatabase.Execute("INSERT INTO evade_logs (Map, VictimX, VictimY, VictimZ, VictimO, VictimType, VictimInfo, AttackerX, AttackerY, AttackerZ, AttackerO, AttackerType, AttackerInfo, EvadeReason) VALUES ({}, {}, {}, {}, {}, '{}', '{}', NULL, NULL, NULL, NULL, NULL, NULL, '{}')", map, unitX, unitY, unitZ, unitOrientation, unitType, CharacterDatabase.EscapeString(unitInfo), evadeReason);
             return;
         }
 
@@ -49,7 +49,7 @@ public:
 
         std::string attackerInfo = std::to_string(attackerGUID) + " " + std::to_string(attacker->GetGUID().GetCounter()) + " " + attacker->GetName();
 
-        CharacterDatabase.Execute("INSERT INTO evade_logs (Map, VictimX, VictimY, VictimZ, VictimO, VictimType, VictimInfo, AttackerX, AttackerY, AttackerZ, AttackerO, AttackerType, AttackerInfo, EvadeReason) VALUES ({}, {}, {}, {}, {}, '{}', '{}', {}, {}, {}, {}, '{}', '{}', '{}')", map, unitX, unitY, unitZ, unitOrientation, unitType, unitInfo, attackerX, attackerY, attackerZ, attackerOrientation, attackerType, attackerInfo, evadeReason);
+        CharacterDatabase.Execute("INSERT INTO evade_logs (Map, VictimX, VictimY, VictimZ, VictimO, VictimType, VictimInfo, AttackerX, AttackerY, AttackerZ, AttackerO, AttackerType, AttackerInfo, EvadeReason) VALUES ({}, {}, {}, {}, {}, '{}', '{}', {}, {}, {}, {}, '{}', '{}', '{}')", map, unitX, unitY, unitZ, unitOrientation, unitType, CharacterDatabase.EscapeString(unitInfo), attackerX, attackerY, attackerZ, attackerOrientation, attackerType, CharacterDatabase.EscapeString(attackerInfo), evadeReason);
         return;
     }
 };
