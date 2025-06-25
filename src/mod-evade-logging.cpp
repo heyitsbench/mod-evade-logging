@@ -26,7 +26,6 @@ public:
         else
             unitGUID = 0;
 
-        LOG_ERROR("sql.sql", "{}", unitGUID);
         std::string unitInfo = std::to_string(unitGUID) + " " + std::to_string(unit->GetGUID().GetCounter()) + " " + unit->GetName();
 
         Unit* attacker = unit->GetVictim();
