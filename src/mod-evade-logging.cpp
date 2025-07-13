@@ -42,7 +42,7 @@ public:
         float attackerOrientation = attacker->GetOrientation();
         std::string attackerType = GetUnitTypeText(attacker->GetTypeId());
         ObjectGuid::LowType attackerGUID;
-        if (unit->IsCreature())
+        if (attacker->IsCreature())
             attackerGUID = attacker->ToCreature()->GetSpawnId();
         else
             attackerGUID = 0;
